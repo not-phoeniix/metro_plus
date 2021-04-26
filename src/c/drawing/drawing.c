@@ -177,8 +177,6 @@ static void draw_number(int number, int x_offset, int y_offset, GColor color, GC
 void draw_bg_update_proc(Layer *layer, GContext *ctx) {
     GRect bounds = layer_get_unobstructed_bounds(window_get_root_layer(main_window));
 
-    window_set_background_color(main_window, settings.BgColor);
-
     GColor panel_color = settings.TileColor;
 
     for(int i=0; i<5; i++) {
@@ -220,18 +218,26 @@ void draw_time_update_proc(Layer *layer, GContext *ctx) {
             top_left_num = 0;
         }
     } else {
-        if(remain_hour >= 10) {
-            top_left_num = 1;
-        } else {
+        if(remain_hour < 10 && remain_hour != 0) {
             top_left_num = 0;
+        } else {
+            top_left_num = 1;
         }
     }
     
-    if(clock_is_24h_style() == true) {
+    if(clock_is_24h_style() == false) {
         top_right_num = alt_remain_hour;
     } else {
-        top_right_num = remain_hour;
+        if(remain_hour >= 10) {
+            top_right_num = remain_hour - 10;
+        } else if(remain_hour == 0) {
+            top_right_num = 2;
+        } else {
+            top_right_num = remain_hour;
+        }
     }
+
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "remain_hour = %d", remain_hour);
 
     draw_number(top_left_num, 2, 2, settings.NumColor, ctx);
     draw_number(top_right_num, 8, 2, settings.NumColor, ctx);

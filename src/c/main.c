@@ -17,6 +17,8 @@ static void tick_hanlder(struct tm *tick_time, TimeUnits units_changed) {
 void update_stuff() {
   update_time();
   layer_mark_dirty(time_layer);
+  layer_mark_dirty(bg_pixel_layer);
+  window_set_background_color(main_window, settings.BgColor);
 }
 
 static void main_window_load(Window *window) {
@@ -32,6 +34,8 @@ static void main_window_load(Window *window) {
   time_layer = layer_create(bounds);
   layer_set_update_proc(time_layer, draw_time_update_proc);
   layer_add_child(window_layer, time_layer);
+
+  update_stuff();
 }
 
 static void main_window_unload() {

@@ -39,5 +39,9 @@
                 "label": "Number Color"
             }
         ]
+    },
+    {
+        "type": "submit",
+        "defaultValue": "Save"
     }
 ]
