@@ -20,7 +20,9 @@
       "watchface": true
     },
     "messageKeys": [
-      "dummy"
+      "BgColorKey",
+      "TileColorKey",
+      "NumColorKey"
     ],
     "resources": {
       "media": []
