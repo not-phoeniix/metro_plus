@@ -1,11 +1,20 @@
 #include <pebble.h>
 #include "main.h"
 #include "drawing/drawing.h"
+#include "config/cfg.h"
+#include "messaging/msg.h"
 
 Window *main_window;
 Layer *bg_pixel_layer, *time_layer;
 
+ClaySettings settings;
+
 static void tick_hanlder(struct tm *tick_time, TimeUnits units_changed) {
+  update_time();
+  layer_mark_dirty(time_layer);
+}
+
+void update_stuff() {
   update_time();
   layer_mark_dirty(time_layer);
 }
@@ -34,6 +43,9 @@ static void init() {
   main_window = window_create();
 
   tick_timer_service_subscribe(MINUTE_UNIT, tick_hanlder);
+
+  init_msg();
+  load_settings();
 
   window_set_window_handlers(main_window, (WindowHandlers) {
     .load = main_window_load,

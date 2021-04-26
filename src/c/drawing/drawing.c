@@ -1,8 +1,11 @@
 #include <pebble.h>
+#include "../main.h"
 
 extern Window *main_window;
 
 static int hour, min;
+
+extern ClaySettings settings;
 
 void update_time() {
     time_t temp = time(NULL);
@@ -27,38 +30,6 @@ static void draw_pixel(int x, int y, GColor color, GRect bounds, GContext *ctx) 
 
     graphics_context_set_fill_color(ctx, color);
     graphics_fill_rect(ctx, pixel, 0, GCornerNone);
-}
-
-static void draw_4_panel_bg(GContext *ctx) {
-    GRect bounds = layer_get_unobstructed_bounds(window_get_root_layer(main_window));
-
-    window_set_background_color(main_window, GColorBlack);
-
-    GColor panel_color = GColorWhite;
-
-    for(int i=0; i<5; i++) {
-        for (int x=0; x<7; x++) {
-            draw_pixel(i+1, x+1, panel_color, bounds, ctx);
-        }
-    }
-
-    for(int i=0; i<5; i++) {
-        for (int x=0; x<7; x++) {
-            draw_pixel(i+7, x+9, panel_color, bounds, ctx);
-        }
-    }
-
-    for(int i=0; i<5; i++) {
-        for (int x=0; x<7; x++) {
-            draw_pixel(i+1, x+9, panel_color, bounds, ctx);
-        }
-    }
-
-    for(int i=0; i<5; i++) {
-        for (int x=0; x<7; x++) {
-            draw_pixel(i+7, x+1, panel_color, bounds, ctx);
-        }
-    }
 }
 
 static void draw_number(int number, int x_offset, int y_offset, GColor color, GContext *ctx) {
@@ -204,7 +175,35 @@ static void draw_number(int number, int x_offset, int y_offset, GColor color, GC
 }
 
 void draw_bg_update_proc(Layer *layer, GContext *ctx) {
-    draw_4_panel_bg(ctx);
+    GRect bounds = layer_get_unobstructed_bounds(window_get_root_layer(main_window));
+
+    window_set_background_color(main_window, settings.BgColor);
+
+    GColor panel_color = settings.TileColor;
+
+    for(int i=0; i<5; i++) {
+        for (int x=0; x<7; x++) {
+            draw_pixel(i+1, x+1, panel_color, bounds, ctx);
+        }
+    }
+
+    for(int i=0; i<5; i++) {
+        for (int x=0; x<7; x++) {
+            draw_pixel(i+7, x+9, panel_color, bounds, ctx);
+        }
+    }
+
+    for(int i=0; i<5; i++) {
+        for (int x=0; x<7; x++) {
+            draw_pixel(i+1, x+9, panel_color, bounds, ctx);
+        }
+    }
+
+    for(int i=0; i<5; i++) {
+        for (int x=0; x<7; x++) {
+            draw_pixel(i+7, x+1, panel_color, bounds, ctx);
+        }
+    }
 }
 
 void draw_time_update_proc(Layer *layer, GContext *ctx) {
@@ -234,8 +233,8 @@ void draw_time_update_proc(Layer *layer, GContext *ctx) {
         top_right_num = remain_hour;
     }
 
-    draw_number(top_left_num, 2, 2, GColorRed, ctx);
-    draw_number(top_right_num, 8, 2, GColorRed, ctx);
-    draw_number((min - min % 10) / 10, 2, 10, GColorRed, ctx);
-    draw_number(min % 10, 8, 10, GColorRed, ctx);
+    draw_number(top_left_num, 2, 2, settings.NumColor, ctx);
+    draw_number(top_right_num, 8, 2, settings.NumColor, ctx);
+    draw_number((min - min % 10) / 10, 2, 10, settings.NumColor, ctx);
+    draw_number(min % 10, 8, 10, settings.NumColor, ctx);
 }

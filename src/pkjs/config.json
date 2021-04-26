@@ -1,0 +1,43 @@
+[
+    {
+        "type": "section",
+        "items": [
+            {
+                "type": "heading",
+                "defaultValue": "Metro+"
+            },
+            {
+                "type": "text",
+                "defaultValue": "By Nicki"
+            }
+        ]
+    },
+    {
+        "type": "section",
+        "items": [
+            {
+                "type": "heading",
+                "defaultValue": "Colors",
+                "size": "7"
+            },
+            {
+                "type": "color",
+                "messageKey": "BgColorKey",
+                "defaultValue": "0x000000",
+                "label": "Background Color"
+            },
+            {
+                "type": "color",
+                "messageKey": "TileColorKey",
+                "defaultValue": "0xFFFFFF",
+                "label": "Tile Color"
+            },
+            {
+                "type": "color",
+                "messageKey": "NumColorKey",
+                "defaultValue": "0x000000",
+                "label": "Number Color"
+            }
+        ]
+    }
+]
