@@ -15,10 +15,18 @@ void update_time() {
     min = t->tm_min;
 }
 
+int if_quickview_else(int if_no, int if_yes) {
+  if(layer_get_unobstructed_bounds(window_get_root_layer(main_window)).size.h == layer_get_bounds(window_get_root_layer(main_window)).size.h) {
+    return if_no;
+  } else {
+    return if_yes;
+  }
+}
+
 //resolution of pixel screen: 13 x 17
 static void draw_pixel(int x, int y, GColor color, GRect bounds, GContext *ctx) {
     GPoint resolution = {
-        .x = 13,
+        .x = if_quickview_else(13, 18),
         .y = 17
     };
 
@@ -179,27 +187,29 @@ void draw_bg_update_proc(Layer *layer, GContext *ctx) {
 
     GColor panel_color = settings.TileColor;
 
+    int x_offset_quickview = if_quickview_else(0, 2);
+
     for(int i=0; i<5; i++) {
         for (int x=0; x<7; x++) {
-            draw_pixel(i+1, x+1, panel_color, bounds, ctx);
+            draw_pixel(i+1 + x_offset_quickview, x+1, panel_color, bounds, ctx);
         }
     }
 
     for(int i=0; i<5; i++) {
         for (int x=0; x<7; x++) {
-            draw_pixel(i+7, x+9, panel_color, bounds, ctx);
+            draw_pixel(i+7 + x_offset_quickview, x+9, panel_color, bounds, ctx);
         }
     }
 
     for(int i=0; i<5; i++) {
         for (int x=0; x<7; x++) {
-            draw_pixel(i+1, x+9, panel_color, bounds, ctx);
+            draw_pixel(i+1 + x_offset_quickview, x+9, panel_color, bounds, ctx);
         }
     }
 
     for(int i=0; i<5; i++) {
         for (int x=0; x<7; x++) {
-            draw_pixel(i+7, x+1, panel_color, bounds, ctx);
+            draw_pixel(i+7 + x_offset_quickview, x+1, panel_color, bounds, ctx);
         }
     }
 }
@@ -208,6 +218,8 @@ void draw_time_update_proc(Layer *layer, GContext *ctx) {
     int remain_hour = hour % 12;
     int alt_remain_hour = hour % 10;
     int top_left_num, top_right_num;
+
+    int x_offset_quickview = if_quickview_else(0, 2);
 
     if (clock_is_24h_style() == true) {
         if(hour >= 10 && hour < 20) {
@@ -225,7 +237,7 @@ void draw_time_update_proc(Layer *layer, GContext *ctx) {
         }
     }
     
-    if(clock_is_24h_style() == false) {
+    if(clock_is_24h_style() == true) {
         top_right_num = alt_remain_hour;
     } else {
         if(remain_hour >= 10) {
@@ -239,8 +251,8 @@ void draw_time_update_proc(Layer *layer, GContext *ctx) {
 
     APP_LOG(APP_LOG_LEVEL_DEBUG, "remain_hour = %d", remain_hour);
 
-    draw_number(top_left_num, 2, 2, settings.NumColor, ctx);
-    draw_number(top_right_num, 8, 2, settings.NumColor, ctx);
-    draw_number((min - min % 10) / 10, 2, 10, settings.NumColor, ctx);
-    draw_number(min % 10, 8, 10, settings.NumColor, ctx);
+    draw_number(top_left_num, 2 + x_offset_quickview, 2, settings.NumColor, ctx);
+    draw_number(top_right_num, 8 + x_offset_quickview, 2, settings.NumColor, ctx);
+    draw_number((min - min % 10) / 10, 2 + x_offset_quickview, 10, settings.NumColor, ctx);
+    draw_number(min % 10, 8 + x_offset_quickview, 10, settings.NumColor, ctx);
 }

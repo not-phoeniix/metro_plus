@@ -18,6 +18,7 @@ void update_stuff() {
   update_time();
   layer_mark_dirty(time_layer);
   layer_mark_dirty(bg_pixel_layer);
+
   window_set_background_color(main_window, settings.BgColor);
 }
 
