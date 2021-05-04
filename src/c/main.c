@@ -3,9 +3,11 @@
 #include "drawing/drawing.h"
 #include "config/cfg.h"
 #include "messaging/msg.h"
+#include "animation/anim.h"
 
 Window *main_window;
-Layer *bg_pixel_layer, *time_layer, *flag_layer;
+Layer *bg_pixel_layer, *time_layer, *flag_layer, *date_layer;
+Animation *anim_start, *anim_end, *anim_start_bg, *anim_end_bg, *anim_start_time, *anim_end_time, *anim_start_flag, *anim_end_flag;
 
 ClaySettings settings;
 
@@ -18,8 +20,24 @@ void update_stuff() {
   update_time();
   layer_mark_dirty(time_layer);
   layer_mark_dirty(bg_pixel_layer);
+  layer_mark_dirty(flag_layer);
+  layer_mark_dirty(date_layer);
 
   window_set_background_color(main_window, settings.BgColor);
+}
+
+static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
+  animate_date();
+  animate_main();
+  layer_set_hidden(date_layer, false);
+  animation_schedule(anim_start);
+  animation_schedule(anim_end);
+  animation_schedule(anim_start_bg);
+  animation_schedule(anim_end_bg);
+  animation_schedule(anim_start_time);
+  animation_schedule(anim_end_time);
+  animation_schedule(anim_start_flag);
+  animation_schedule(anim_end_flag);
 }
 
 static void main_window_load(Window *window) {
@@ -39,6 +57,14 @@ static void main_window_load(Window *window) {
   time_layer = layer_create(bounds);
   layer_set_update_proc(time_layer, draw_time_update_proc);
   layer_add_child(window_layer, time_layer);
+
+  date_layer = layer_create(bounds);
+  layer_set_update_proc(date_layer, draw_date_update_proc);
+  layer_set_hidden(date_layer, true);
+  layer_add_child(window_layer, date_layer);
+
+  animate_date();
+  animate_main();
 
   update_stuff();
 }
@@ -61,12 +87,15 @@ static void init() {
     .unload = main_window_unload
   });
 
+  accel_tap_service_subscribe(accel_tap_handler);
+
   window_stack_push(main_window, true);
 }
 
 static void deinit() {
   window_destroy(main_window);
   tick_timer_service_unsubscribe();
+  accel_data_service_unsubscribe();
 }
 
 int main(void) {

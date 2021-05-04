@@ -4,11 +4,22 @@
 extern Window *main_window;
 
 static int hour, min;
+static char date_char[] = "MON mm/dd";
 
 extern int *flag_colors[];
 extern int num_stripes[];
 
 extern ClaySettings settings;
+
+void update_time() {
+    time_t temp = time(NULL);
+    struct tm *t = localtime(&temp);
+
+    hour = t->tm_hour;
+    min = t->tm_min;
+
+    strftime(date_char, sizeof(date_char), "%a %m/%d", t);
+}
 
 static void draw_flag(int segments, int colors[], GContext *ctx) {
     GRect bounds = layer_get_unobstructed_bounds(window_get_root_layer(main_window));
@@ -54,14 +65,6 @@ static void draw_flag(int segments, int colors[], GContext *ctx) {
             graphics_fill_rect(ctx, flag_stripe, 0, GCornerNone);
         }
     }
-}
-
-void update_time() {
-    time_t temp = time(NULL);
-    struct tm *t = localtime(&temp);
-
-    hour = t->tm_hour;
-    min = t->tm_min;
 }
 
 int if_quickview_else(int if_no, int if_yes) {
@@ -231,6 +234,21 @@ static void draw_number(int number, int x_offset, int y_offset, GColor color, GC
     }
 }
 
+static void draw_date(GContext *ctx) {
+    GRect win_bounds = layer_get_unobstructed_bounds(window_get_root_layer(main_window));
+    GRect bounds = GRect(0, 0, win_bounds.size.w, 40);
+
+    static GFont font;
+
+    font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_LECO_CUSTOM_24));
+    
+    graphics_context_set_fill_color(ctx, settings.TileColor);
+    graphics_fill_rect(ctx, bounds, 0, GCornerNone);
+
+    graphics_context_set_text_color(ctx, settings.NumColor);
+    graphics_draw_text(ctx, date_char, font, GRect(0, 4, bounds.size.w, bounds.size.h), GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, 0);
+}
+
 void draw_bg_update_proc(Layer *layer, GContext *ctx) {
     GRect bounds = layer_get_unobstructed_bounds(window_get_root_layer(main_window));
 
@@ -302,10 +320,12 @@ void draw_time_update_proc(Layer *layer, GContext *ctx) {
         }
     }
 
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "remain_hour = %d", remain_hour);
-
     draw_number(top_left_num, 2 + x_offset_quickview, 2, settings.NumColor, ctx);
     draw_number(top_right_num, 8 + x_offset_quickview, 2, settings.NumColor, ctx);
     draw_number((min - min % 10) / 10, 2 + x_offset_quickview, 10, settings.NumColor, ctx);
     draw_number(min % 10, 8 + x_offset_quickview, 10, settings.NumColor, ctx);
+}
+
+void draw_date_update_proc(Layer *layer, GContext *ctx) {
+    draw_date(ctx);
 }

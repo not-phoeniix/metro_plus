@@ -31,7 +31,13 @@
       "RotateFlagKey"
     ],
     "resources": {
-      "media": []
+      "media": [
+        {
+          "type": "font",
+          "name": "LECO_CUSTOM_24",
+          "file": "LECO 1976-Regular.ttf"
+        }
+      ]
     },
     "capabilities": [
       "configurable"
