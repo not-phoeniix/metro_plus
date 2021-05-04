@@ -5,7 +5,56 @@ extern Window *main_window;
 
 static int hour, min;
 
+extern int *flag_colors[];
+extern int num_stripes[];
+
 extern ClaySettings settings;
+
+static void draw_flag(int segments, int colors[], GContext *ctx) {
+    GRect bounds = layer_get_unobstructed_bounds(window_get_root_layer(main_window));
+
+    if(settings.rotFlag == 3) {
+        int h = bounds.size.h;
+        int w = bounds.size.w / segments + (bounds.size.w % segments != 0);
+
+        for (int i = 0; i < segments; i++) {
+            GRect flag_stripe = GRect(w * i, 0, w, h);
+
+            graphics_context_set_fill_color(ctx, GColorFromHEX(colors[i]));
+            graphics_fill_rect(ctx, flag_stripe, 0, GCornerNone);
+        }
+    } else if(settings.rotFlag == 2) {
+        int h = -1 * bounds.size.h / segments - (-1 * bounds.size.h % segments != 0);
+        int w = bounds.size.w;
+
+        for (int i = 0; i < segments; i++) {
+            GRect flag_stripe = GRect(0, bounds.size.h + (h * i), w, h);
+
+            graphics_context_set_fill_color(ctx, GColorFromHEX(colors[i]));
+            graphics_fill_rect(ctx, flag_stripe, 0, GCornerNone);
+        }
+    } else if(settings.rotFlag == 1) {
+        int h = bounds.size.h;
+        int w = -1 * bounds.size.w / segments - (bounds.size.w % segments != 0);
+
+        for (int i = 0; i < segments; i++) {
+            GRect flag_stripe = GRect(bounds.size.w + (w * i), 0, w, h);
+
+            graphics_context_set_fill_color(ctx, GColorFromHEX(colors[i]));
+            graphics_fill_rect(ctx, flag_stripe, 0, GCornerNone);
+        }
+    } else {
+        int h = bounds.size.h / segments + (bounds.size.h % segments != 0);
+        int w = bounds.size.w;
+
+        for (int i = 0; i < segments; i++) {
+            GRect flag_stripe = GRect(0, h * i, w, h);
+
+            graphics_context_set_fill_color(ctx, GColorFromHEX(colors[i]));
+            graphics_fill_rect(ctx, flag_stripe, 0, GCornerNone);
+        }
+    }
+}
 
 void update_time() {
     time_t temp = time(NULL);
@@ -212,6 +261,10 @@ void draw_bg_update_proc(Layer *layer, GContext *ctx) {
             draw_pixel(i+7 + x_offset_quickview, x+1, panel_color, bounds, ctx);
         }
     }
+}
+
+void draw_flag_update_proc(Layer *layer, GContext *ctx) {
+    draw_flag(num_stripes[settings.flagNumber], flag_colors[settings.flagNumber], ctx);
 }
 
 void draw_time_update_proc(Layer *layer, GContext *ctx) {

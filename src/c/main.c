@@ -5,7 +5,7 @@
 #include "messaging/msg.h"
 
 Window *main_window;
-Layer *bg_pixel_layer, *time_layer;
+Layer *bg_pixel_layer, *time_layer, *flag_layer;
 
 ClaySettings settings;
 
@@ -27,6 +27,10 @@ static void main_window_load(Window *window) {
   GRect bounds = layer_get_bounds(window_layer);
 
   update_time();
+
+  flag_layer = layer_create(bounds);
+  layer_set_update_proc(flag_layer, draw_flag_update_proc);
+  layer_add_child(window_layer, flag_layer);
   
   bg_pixel_layer = layer_create(bounds);
   layer_set_update_proc(bg_pixel_layer, draw_bg_update_proc);

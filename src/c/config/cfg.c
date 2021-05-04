@@ -8,6 +8,8 @@ static void set_defaults() {
     settings.BgColor = GColorBlack;
     settings.TileColor = GColorWhite;
     settings.NumColor = GColorBlack;
+    settings.rotFlag = 0;
+    settings.flagNumber = 0;
 }
 
 void load_settings() {

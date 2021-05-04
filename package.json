@@ -26,7 +26,9 @@
     "messageKeys": [
       "BgColorKey",
       "TileColorKey",
-      "NumColorKey"
+      "NumColorKey",
+      "FlagKey",
+      "RotateFlagKey"
     ],
     "resources": {
       "media": []

@@ -21,6 +21,16 @@ static void inbox_recieved_handler(DictionaryIterator *iter, void *ctx) {
         settings.NumColor = GColorFromHEX(num_color_t->value->int32);
     }
 
+    Tuple *flag_t = dict_find(iter, MESSAGE_KEY_FlagKey);
+    if (flag_t) {
+        settings.flagNumber = atoi(flag_t->value->cstring);
+    }
+
+    Tuple *rotflag_t = dict_find(iter, MESSAGE_KEY_RotateFlagKey);
+    if(rotflag_t) {
+        settings.rotFlag = atoi(rotflag_t->value->cstring);
+    }
+
     save_settings();
     update_stuff();
 }
