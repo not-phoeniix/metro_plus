@@ -37,6 +37,12 @@
           "type": "font",
           "name": "LECO_CUSTOM_24",
           "file": "LECO 1976-Regular.ttf"
+        },
+        {
+          "menuIcon": "true",
+          "type": "png",
+          "name": "MENU_ICON",
+          "file": "metro_plus_ico.png"
         }
       ]
     },
