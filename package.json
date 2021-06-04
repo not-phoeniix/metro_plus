@@ -28,7 +28,8 @@
       "TileColorKey",
       "NumColorKey",
       "FlagKey",
-      "RotateFlagKey"
+      "RotateFlagKey",
+      "EnableDateKey"
     ],
     "resources": {
       "media": [

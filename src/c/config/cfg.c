@@ -10,6 +10,7 @@ static void set_defaults() {
     settings.NumColor = GColorBlack;
     settings.rotFlag = 0;
     settings.flagNumber = 0;
+    settings.doDate = true;
 }
 
 void load_settings() {

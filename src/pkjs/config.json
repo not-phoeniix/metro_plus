@@ -39,10 +39,16 @@
                 "label": "Number Color"
             },
             {
+                "type": "toggle",
+                "messageKey": "EnableDateKey",
+                "defaultValue": "true",
+                "label": "Enable shake for date"
+            },
+            {
                 "type": "select",
                 "defaultValue": "0",
                 "messageKey": "FlagKey",
-                "label": "Pride Flag in Background",
+                "label": "Pride flag in background",
                 "capabilities": ["COLOR"],
                 "options": [
                     {
@@ -82,7 +88,7 @@
             {
                 "type": "select",
                 "defaultValue": "0",
-                "label": "Flag Orientation",
+                "label": "Flag orientation",
                 "messageKey": "RotateFlagKey",
                 "description": "(it's measured clockwise)",
                 "options": [

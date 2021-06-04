@@ -11,9 +11,33 @@ Animation *anim_start, *anim_end, *anim_start_bg, *anim_end_bg, *anim_start_time
 
 ClaySettings settings;
 
+bool animate_scheduled = false;
+
 static void tick_hanlder(struct tm *tick_time, TimeUnits units_changed) {
   update_time();
   layer_mark_dirty(time_layer);
+}
+
+static void timer_callback(void *ctx) {
+  animate_scheduled = false;
+}
+
+static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
+  if(animate_scheduled == false && settings.doDate == true) {
+    animate_scheduled = true;
+    app_timer_register(3000, timer_callback, NULL);
+
+    Animation *start_spawn = animation_spawn_create(anim_start, anim_start_bg, anim_start_flag, anim_start_time, NULL);
+    Animation *end_spawn = animation_spawn_create(anim_end, anim_end_bg, anim_end_flag, anim_end_time, NULL);
+
+    animate_date();
+    animate_main();
+
+    layer_set_hidden(date_layer, false);
+
+    animation_schedule(start_spawn);
+    animation_schedule(end_spawn);
+  }
 }
 
 void update_stuff() {
@@ -24,20 +48,6 @@ void update_stuff() {
   layer_mark_dirty(date_layer);
 
   window_set_background_color(main_window, settings.BgColor);
-}
-
-static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
-  animate_date();
-  animate_main();
-  layer_set_hidden(date_layer, false);
-  animation_schedule(anim_start);
-  animation_schedule(anim_end);
-  animation_schedule(anim_start_bg);
-  animation_schedule(anim_end_bg);
-  animation_schedule(anim_start_time);
-  animation_schedule(anim_end_time);
-  animation_schedule(anim_start_flag);
-  animation_schedule(anim_end_flag);
 }
 
 static void main_window_load(Window *window) {

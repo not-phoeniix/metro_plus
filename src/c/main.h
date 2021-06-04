@@ -7,6 +7,7 @@ typedef struct ClaySettings {
     GColor NumColor;
     int flagNumber;
     int rotFlag;
+    bool doDate;
 } ClaySettings;
 
 void update_stuff();

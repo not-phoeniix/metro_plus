@@ -17,7 +17,7 @@ void animate_date() {
     anim_end = property_animation_get_animation(prop_anim_end);
 
     const int delay_ms = 0;
-    const int duration_ms = 300;
+    const int duration_ms = 200;
     const int on_screen_delay = 3000;
 
     animation_set_curve(anim_start, AnimationCurveEaseOut);
@@ -53,7 +53,7 @@ void animate_main() {
     anim_end_flag = property_animation_get_animation(prop_anim_end_flag);
 
     const int delay_ms = 0;
-    const int duration_ms = 300;
+    const int duration_ms = 200;
     const int on_screen_delay = 3000;
 
     //tiles 
