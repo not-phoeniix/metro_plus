@@ -3,6 +3,6 @@
 Extension of other metro watchfaces on the Pebble store with features like:
  - customizable colors
  - pride flag background :)
- - animations
+ - animated date
 
 Heavily inspired by Metro Flip by AngerDanger
