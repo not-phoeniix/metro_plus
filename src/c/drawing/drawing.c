@@ -67,6 +67,7 @@ static void draw_flag(int segments, int colors[], GContext *ctx) {
     }
 }
 
+//
 int if_quickview_else(int if_no, int if_yes) {
   if(layer_get_unobstructed_bounds(window_get_root_layer(main_window)).size.h == layer_get_bounds(window_get_root_layer(main_window)).size.h) {
     return if_no;
@@ -78,13 +79,20 @@ int if_quickview_else(int if_no, int if_yes) {
 //resolution of pixel screen: 13 x 17
 static void draw_pixel(int x, int y, GColor color, GRect bounds, GContext *ctx) {
     GPoint resolution = {
-        .x = if_quickview_else(13, 18),
+        .x = 13,
         .y = 17
     };
 
-    int square_width = bounds.size.w / resolution.x;
-    int x_coord = x * bounds.size.w / resolution.x;
-    int y_coord = y * bounds.size.h / resolution.y;
+    int quickview_x_offset = 13;
+
+    GPoint screen_res = {
+        .x = if_quickview_else(bounds.size.w, bounds.size.w - (quickview_x_offset * 2)),
+        .y = bounds.size.h
+    };
+
+    int square_width = screen_res.x/ resolution.x;
+    int x_coord = x * screen_res.x / resolution.x + if_quickview_else(0, quickview_x_offset);
+    int y_coord = y * screen_res.y/ resolution.y;
 
     GRect pixel = GRect(x_coord, y_coord, square_width, square_width);
 
@@ -254,29 +262,27 @@ void draw_bg_update_proc(Layer *layer, GContext *ctx) {
 
     GColor panel_color = settings.TileColor;
 
-    int x_offset_quickview = if_quickview_else(0, 2);
-
     for(int i=0; i<5; i++) {
         for (int x=0; x<7; x++) {
-            draw_pixel(i+1 + x_offset_quickview, x+1, panel_color, bounds, ctx);
+            draw_pixel(i+1, x+1, panel_color, bounds, ctx);
         }
     }
 
     for(int i=0; i<5; i++) {
         for (int x=0; x<7; x++) {
-            draw_pixel(i+7 + x_offset_quickview, x+9, panel_color, bounds, ctx);
+            draw_pixel(i+7, x+9, panel_color, bounds, ctx);
         }
     }
 
     for(int i=0; i<5; i++) {
         for (int x=0; x<7; x++) {
-            draw_pixel(i+1 + x_offset_quickview, x+9, panel_color, bounds, ctx);
+            draw_pixel(i+1, x+9, panel_color, bounds, ctx);
         }
     }
 
     for(int i=0; i<5; i++) {
         for (int x=0; x<7; x++) {
-            draw_pixel(i+7 + x_offset_quickview, x+1, panel_color, bounds, ctx);
+            draw_pixel(i+7, x+1, panel_color, bounds, ctx);
         }
     }
 }
@@ -289,8 +295,6 @@ void draw_time_update_proc(Layer *layer, GContext *ctx) {
     int remain_hour = hour % 12;
     int alt_remain_hour = hour % 10;
     int top_left_num, top_right_num;
-
-    int x_offset_quickview = if_quickview_else(0, 2);
 
     if (clock_is_24h_style() == true) {
         if(hour >= 10 && hour < 20) {
@@ -320,10 +324,10 @@ void draw_time_update_proc(Layer *layer, GContext *ctx) {
         }
     }
 
-    draw_number(top_left_num, 2 + x_offset_quickview, 2, settings.NumColor, ctx);
-    draw_number(top_right_num, 8 + x_offset_quickview, 2, settings.NumColor, ctx);
-    draw_number((min - min % 10) / 10, 2 + x_offset_quickview, 10, settings.NumColor, ctx);
-    draw_number(min % 10, 8 + x_offset_quickview, 10, settings.NumColor, ctx);
+    draw_number(top_left_num, 2, 2, settings.NumColor, ctx);
+    draw_number(top_right_num, 8, 2, settings.NumColor, ctx);
+    draw_number((min - min % 10) / 10, 2, 10, settings.NumColor, ctx);
+    draw_number(min % 10, 8, 10, settings.NumColor, ctx);
 }
 
 void draw_date_update_proc(Layer *layer, GContext *ctx) {
