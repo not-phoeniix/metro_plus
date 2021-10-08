@@ -5,7 +5,7 @@
 extern ClaySettings settings;
 
 static void set_defaults() {
-    settings.BgColor = GColorBlack;
+    settings.BgColor = GColorRed;
     settings.TileColor = GColorWhite;
     settings.NumColor = GColorBlack;
     settings.rotFlag = 0;

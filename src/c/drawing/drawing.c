@@ -85,14 +85,26 @@ static void draw_pixel(int x, int y, GColor color, GRect bounds, GContext *ctx) 
 
     int quickview_x_offset = 13;
 
+    int round_offset = 24;
+
+    //basalt resolutions
+    int basalt_x_res = if_quickview_else(bounds.size.w, bounds.size.w - (quickview_x_offset * 2));
+    int basalt_y_res = bounds.size.h;
+
+    //chalk resolutions
+    int chalk_x_res = bounds.size.w - (round_offset * 2);
+    int chalk_y_res = bounds.size.h - (round_offset * 2);
+
+    //gpoint that defines the screen resolution
     GPoint screen_res = {
-        .x = if_quickview_else(bounds.size.w, bounds.size.w - (quickview_x_offset * 2)),
-        .y = bounds.size.h
+        .x = PBL_IF_ROUND_ELSE(chalk_x_res, basalt_x_res),
+        .y = PBL_IF_ROUND_ELSE(chalk_y_res, basalt_y_res)
     };
 
+    //width and coordinates to draw pixels
     int square_width = screen_res.x/ resolution.x;
-    int x_coord = x * screen_res.x / resolution.x + if_quickview_else(0, quickview_x_offset);
-    int y_coord = y * screen_res.y/ resolution.y;
+    int x_coord = x * screen_res.x / resolution.x + if_quickview_else(0, quickview_x_offset) + PBL_IF_ROUND_ELSE(round_offset, 0);
+    int y_coord = y * screen_res.y/ resolution.y + PBL_IF_ROUND_ELSE(round_offset, 0);
 
     GRect pixel = GRect(x_coord, y_coord, square_width, square_width);
 
