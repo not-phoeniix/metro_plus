@@ -7,7 +7,7 @@ extern Animation *anim_start, *anim_end, *anim_start_bg, *anim_end_bg, *anim_sta
 void animate_date() {
     GRect bounds = layer_get_bounds(window_get_root_layer(main_window));
   
-    GRect date_anim_start = GRect(0, -40, bounds.size.w, bounds.size.h);
+    GRect date_anim_start = GRect(0, PBL_IF_ROUND_ELSE(-60, -40), bounds.size.w, bounds.size.h);
     GRect date_anim_end = GRect(0, 0, bounds.size.w, bounds.size.h);
 
     PropertyAnimation *prop_anim_start = property_animation_create_layer_frame(date_layer, &date_anim_start, &date_anim_end);
@@ -33,7 +33,7 @@ void animate_main() {
     GRect bounds = layer_get_bounds(window_get_root_layer(main_window));
   
     GRect main_anim_start = GRect(0, 0, bounds.size.w, bounds.size.h);
-    GRect main_anim_end = GRect(0, 40, bounds.size.w, bounds.size.h);
+    GRect main_anim_end = GRect(0, PBL_IF_ROUND_ELSE(60, 40), bounds.size.w, bounds.size.h);
 
     PropertyAnimation *prop_anim_start_bg = property_animation_create_layer_frame(bg_pixel_layer, &main_anim_start, &main_anim_end);
     PropertyAnimation *prop_anim_start_time = property_animation_create_layer_frame(time_layer, &main_anim_start, &main_anim_end);

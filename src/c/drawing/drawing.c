@@ -256,7 +256,7 @@ static void draw_number(int number, int x_offset, int y_offset, GColor color, GC
 
 static void draw_date(GContext *ctx) {
     GRect win_bounds = layer_get_unobstructed_bounds(window_get_root_layer(main_window));
-    GRect bounds = GRect(0, 0, win_bounds.size.w, 40);
+    GRect bounds = GRect(0, 0, win_bounds.size.w, PBL_IF_ROUND_ELSE(60, 40));
 
     static GFont font;
 
@@ -266,7 +266,7 @@ static void draw_date(GContext *ctx) {
     graphics_fill_rect(ctx, bounds, 0, GCornerNone);
 
     graphics_context_set_text_color(ctx, settings.NumColor);
-    graphics_draw_text(ctx, date_char, font, GRect(0, 4, bounds.size.w, bounds.size.h), GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, 0);
+    graphics_draw_text(ctx, date_char, font, GRect(0, PBL_IF_ROUND_ELSE(24, 4), bounds.size.w, bounds.size.h), GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, 0);
 }
 
 void draw_bg_update_proc(Layer *layer, GContext *ctx) {
